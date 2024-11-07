@@ -57,6 +57,29 @@ const getActor = async (actorName) => {
 };
 
 /**
+ * Fetches the movies of a given actor by their ID.
+ *
+ * @param {number} actorId
+ * @returns {Promise<Array<Object>>}
+ */
+const getActorMovies = async (actorId) => {
+  const moviesRequestEndpoint = `/person/${actorId}/movie_credits?`;
+  const requestParams = `api_key=${TMDB_KEY}&language=en-US`;
+  const urlToFetch = `${tmdbBaseUrl}${moviesRequestEndpoint}${requestParams}`;
+
+  try {
+    const response = await fetch(urlToFetch);
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      return jsonResponse.cast;
+    }
+  } catch (error) {
+    console.error("Error fetching actor's movies:", error);
+    return [];
+  }
+};
+
+/**
  * Displays actors' photos and names in a specified div.
  *
  * @param {Array<Object>} actorsArray
@@ -101,9 +124,9 @@ const displayActors = (actorsArray) => {
 };
 
 /**
- * Display actor's profile in a specified div
+ * Display actor's profile and movies in a specified div
  *
- * @param {string} actorName - Name of the actor required
+ * @param {string} actorName
  */
 const displayActorDetails = async (actorName) => {
   actorDetailsDiv.innerHTML = "<p>Loading actor details...</p>";
@@ -148,6 +171,30 @@ const displayActorDetails = async (actorName) => {
   detailsContainer.appendChild(name);
   detailsContainer.appendChild(knownFor);
   detailsContainer.appendChild(popularity);
+
+  const moviesHeader = document.createElement("h3");
+  moviesHeader.textContent = "Filmographie";
+  moviesHeader.classList.add("movies-header");
+
+  const moviesList = document.createElement("ul");
+  moviesList.classList.add("movies-list");
+
+  const movies = await getActorMovies(actor.id);
+
+  if (movies.length === 0) {
+    const noMovies = document.createElement("p");
+    noMovies.textContent = "Aucun film trouvé pour cet acteur.";
+    moviesList.appendChild(noMovies);
+  } else {
+    movies.forEach((movie) => {
+      const movieItem = document.createElement("li");
+      movieItem.textContent = movie.title || movie.name;
+      moviesList.appendChild(movieItem);
+    });
+  }
+
+  detailsContainer.appendChild(moviesHeader);
+  detailsContainer.appendChild(moviesList);
 
   actorDetailsDiv.innerHTML = "";
   actorDetailsDiv.appendChild(detailsContainer);
