@@ -4,3 +4,4 @@ Actors Quest is an educational web application that allows users to search for a
 
 To make this application functional, make a files named "script.js" and add the following constants:
 API_KEY
+API_BASE_URL
