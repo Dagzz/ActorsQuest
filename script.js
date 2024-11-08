@@ -1,4 +1,3 @@
-const tmdbBaseUrl = "https://api.themoviedb.org/3";
 const searchBtn = document.getElementById("search-button");
 const searchInput = document.getElementById("search-input");
 const targetDiv = document.getElementById("result");
@@ -17,10 +16,10 @@ const getActors = async () => {
   }
 
   const actorRequestEndpoint = "/search/person?";
-  const requestParams = `api_key=${TMDB_KEY}&query=${encodeURIComponent(
+  const requestParams = `api_key=${API_KEY}&query=${encodeURIComponent(
     inputActor
   )}`;
-  const urlToFetch = `${tmdbBaseUrl}${actorRequestEndpoint}${requestParams}`;
+  const urlToFetch = `${API_BASE_URL}${actorRequestEndpoint}${requestParams}`;
 
   try {
     const response = await fetch(urlToFetch);
@@ -42,8 +41,8 @@ const getActors = async () => {
  */
 const getActor = async (actorName) => {
   const actorRequestEndpoint = "/search/person?";
-  const requestParams = `api_key=${TMDB_KEY}&query=${actorName}`;
-  const urlToFetch = `${tmdbBaseUrl}${actorRequestEndpoint}${requestParams}`;
+  const requestParams = `api_key=${API_KEY}&query=${actorName}`;
+  const urlToFetch = `${API_BASE_URL}${actorRequestEndpoint}${requestParams}`;
 
   try {
     const response = await fetch(urlToFetch);
@@ -64,8 +63,8 @@ const getActor = async (actorName) => {
  */
 const getActorMovies = async (actorId) => {
   const moviesRequestEndpoint = `/person/${actorId}/movie_credits?`;
-  const requestParams = `api_key=${TMDB_KEY}&language=en-US`;
-  const urlToFetch = `${tmdbBaseUrl}${moviesRequestEndpoint}${requestParams}`;
+  const requestParams = `api_key=${API_KEY}&language=en-US`;
+  const urlToFetch = `${API_BASE_URL}${moviesRequestEndpoint}${requestParams}`;
 
   try {
     const response = await fetch(urlToFetch);
